@@ -1,5 +1,5 @@
-// Dagboksapp - MVP Del 1a
-// Funktionalitet: Skriva för valfritt datum med auto-save
+// Dagboksapp - MVP Del 1b
+// Funktionalitet: Skriva, läsa i läsläge, och dela backup
 
 class DiaryApp {
     constructor() {
@@ -24,10 +24,16 @@ class DiaryApp {
         this.nextDayBtn = document.getElementById('nextDay');
         this.viewListBtn = document.getElementById('viewListBtn');
         this.backToWriteBtn = document.getElementById('backToWriteBtn');
+        this.shareBackupBtn = document.getElementById('shareBackupBtn');
         this.writeView = document.getElementById('writeView');
         this.listView = document.getElementById('listView');
+        this.readView = document.getElementById('readView');
         this.entriesList = document.getElementById('entriesList');
         this.noEntries = document.getElementById('noEntries');
+        this.backToListBtn = document.getElementById('backToListBtn');
+        this.editEntryBtn = document.getElementById('editEntryBtn');
+        this.readDate = document.getElementById('readDate');
+        this.readContent = document.getElementById('readContent');
     }
 
     // Initiera event listeners
@@ -55,6 +61,21 @@ class DiaryApp {
 
         // Tillbaka till skrivvy
         this.backToWriteBtn.addEventListener('click', () => {
+            this.showWriteView();
+        });
+
+        // Dela backup
+        this.shareBackupBtn.addEventListener('click', () => {
+            this.shareBackup();
+        });
+
+        // Tillbaka till lista från läsvy
+        this.backToListBtn.addEventListener('click', () => {
+            this.showListView();
+        });
+
+        // Redigera inlägg från läsvy
+        this.editEntryBtn.addEventListener('click', () => {
             this.showWriteView();
         });
     }
@@ -191,14 +212,11 @@ class DiaryApp {
             `;
         }).join('');
 
-        // Lägg till click-lyssnare på alla inlägg
+        // Lägg till click-lyssnare på alla inlägg - öppna i läsläge
         this.entriesList.querySelectorAll('.entry-item').forEach(item => {
             item.addEventListener('click', () => {
                 const date = item.dataset.date;
-                this.currentDate = date;
-                this.loadEntry(date);
-                this.updateDateDisplay();
-                this.showWriteView();
+                this.showReadView(date);
             });
         });
     }
@@ -219,8 +237,101 @@ class DiaryApp {
     // Visa skrivvy
     showWriteView() {
         this.listView.classList.remove('active');
+        this.readView.classList.remove('active');
         this.writeView.classList.add('active');
+        this.loadEntry(this.currentDate);
+        this.updateDateDisplay();
         this.entryText.focus();
+    }
+
+    // Visa läsvy för ett inlägg
+    showReadView(date) {
+        this.currentDate = date;
+        const entry = this.entries[date];
+
+        if (!entry) {
+            // Om inget inlägg finns, gå till skrivvy istället
+            this.showWriteView();
+            return;
+        }
+
+        this.readDate.textContent = this.formatDisplayDate(date);
+        this.readContent.textContent = entry;
+
+        this.writeView.classList.remove('active');
+        this.listView.classList.remove('active');
+        this.readView.classList.add('active');
+    }
+
+    // Dela backup via Web Share API
+    async shareBackup() {
+        const entriesArray = Object.entries(this.entries)
+            .sort((a, b) => a[0].localeCompare(b[0])); // Äldsta först för backup
+
+        if (entriesArray.length === 0) {
+            alert('Inga inlägg att säkerhetskopiera ännu!');
+            return;
+        }
+
+        // Formatera som läsbar text
+        const backupText = this.formatBackupText(entriesArray);
+
+        // Skapa en blob (fil)
+        const blob = new Blob([backupText], { type: 'text/plain;charset=utf-8' });
+        const file = new File([blob], `dagbok-backup-${this.getTodayString()}.txt`, {
+            type: 'text/plain'
+        });
+
+        // Kolla om Web Share API finns (mobil)
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({
+                    title: 'Min Dagbok - Backup',
+                    text: 'Säkerhetskopia av min dagbok',
+                    files: [file]
+                });
+            } catch (err) {
+                // Användaren avbröt delningen eller något gick fel
+                if (err.name !== 'AbortError') {
+                    console.error('Delning misslyckades:', err);
+                    this.fallbackDownload(backupText);
+                }
+            }
+        } else {
+            // Fallback: Ladda ner filen direkt
+            this.fallbackDownload(backupText);
+        }
+    }
+
+    // Formatera backup som text
+    formatBackupText(entriesArray) {
+        let text = '='.repeat(50) + '\n';
+        text += 'MIN DAGBOK - SÄKERHETSKOPIA\n';
+        text += `Skapad: ${new Date().toLocaleString('sv-SE')}\n`;
+        text += `Antal inlägg: ${entriesArray.length}\n`;
+        text += '='.repeat(50) + '\n\n';
+
+        entriesArray.forEach(([date, entry]) => {
+            const displayDate = this.formatDisplayDate(date);
+            text += `${displayDate} (${date})\n`;
+            text += '-'.repeat(50) + '\n';
+            text += entry + '\n\n';
+        });
+
+        return text;
+    }
+
+    // Fallback: Ladda ner fil
+    fallbackDownload(text) {
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dagbok-backup-${this.getTodayString()}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     // Escape HTML för säkerhet

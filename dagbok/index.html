@@ -46,12 +46,33 @@
                 <button id="backToWriteBtn" class="back-btn">← Tillbaka</button>
             </div>
 
+            <div class="backup-section">
+                <button id="shareBackupBtn" class="backup-btn">
+                    📤 Dela backup
+                </button>
+            </div>
+
             <div id="entriesList" class="entries-list">
                 <!-- Inlägg kommer här -->
             </div>
 
             <div id="noEntries" class="no-entries" style="display: none;">
                 Inga inlägg ännu. Börja skriva!
+            </div>
+        </main>
+
+        <main id="readView" class="view">
+            <div class="read-header">
+                <button id="backToListBtn" class="back-btn">← Tillbaka</button>
+                <button id="editEntryBtn" class="edit-btn">✏️ Redigera</button>
+            </div>
+
+            <div class="read-date" id="readDate">
+                <!-- Datum här -->
+            </div>
+
+            <div class="read-content" id="readContent">
+                <!-- Inläggstext här -->
             </div>
         </main>
     </div>
