@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Min Dagbok</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📔 Min Dagbok</h1>
+        </header>
+
+        <main id="writeView" class="view active">
+            <div class="date-navigation">
+                <button id="prevDay" class="nav-btn" aria-label="Föregående dag">←</button>
+                <input type="date" id="dateInput" aria-label="Välj datum">
+                <button id="nextDay" class="nav-btn" aria-label="Nästa dag">→</button>
+            </div>
+
+            <div class="date-display" id="dateDisplay">
+                Idag
+            </div>
+
+            <div class="entry-status" id="entryStatus"></div>
+
+            <textarea
+                id="entryText"
+                placeholder="Vad hände idag?&#10;&#10;Skriv några rader om din dag..."
+                aria-label="Dagboksinlägg"
+            ></textarea>
+
+            <div class="save-indicator" id="saveIndicator">
+                <span class="saved-text">✓ Sparat</span>
+            </div>
+
+            <button id="viewListBtn" class="secondary-btn">
+                Visa alla inlägg
+            </button>
+        </main>
+
+        <main id="listView" class="view">
+            <div class="list-header">
+                <h2>Alla inlägg</h2>
+                <button id="backToWriteBtn" class="back-btn">← Tillbaka</button>
+            </div>
+
+            <div id="entriesList" class="entries-list">
+                <!-- Inlägg kommer här -->
+            </div>
+
+            <div id="noEntries" class="no-entries" style="display: none;">
+                Inga inlägg ännu. Börja skriva!
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

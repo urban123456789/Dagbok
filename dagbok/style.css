@@ -1,0 +1,264 @@
+/* Reset och bas */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Views */
+.view {
+    display: none;
+    padding: 20px;
+}
+
+.view.active {
+    display: block;
+}
+
+/* Datumnavigering */
+.date-navigation {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.nav-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.nav-btn:active {
+    background: #5568d3;
+}
+
+#dateInput {
+    flex: 1;
+    padding: 14px;
+    font-size: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Datumvisning */
+.date-display {
+    font-size: 18px;
+    font-weight: 600;
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Status för inlägg */
+.entry-status {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    min-height: 20px;
+}
+
+/* Textfält */
+#entryText {
+    width: 100%;
+    min-height: 300px;
+    padding: 20px;
+    font-size: 18px;
+    line-height: 1.8;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    resize: vertical;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+#entryText:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#entryText::placeholder {
+    color: #aaa;
+}
+
+/* Sparindikator */
+.save-indicator {
+    text-align: center;
+    margin-top: 10px;
+    min-height: 30px;
+}
+
+.saved-text {
+    display: inline-block;
+    color: #4caf50;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.saved-text.show {
+    opacity: 1;
+}
+
+/* Knappar */
+button {
+    font-family: inherit;
+}
+
+.secondary-btn {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.secondary-btn:active {
+    background: #f0f0f0;
+}
+
+/* Listvy */
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.list-header h2 {
+    font-size: 22px;
+    color: #333;
+}
+
+.back-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.back-btn:active {
+    background: #5568d3;
+}
+
+.entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.entry-item {
+    background: #f9f9f9;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.entry-item:active {
+    background: #f0f0f0;
+    border-color: #667eea;
+}
+
+.entry-date {
+    font-weight: 600;
+    color: #667eea;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.entry-preview {
+    color: #555;
+    font-size: 15px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.no-entries {
+    text-align: center;
+    color: #999;
+    padding: 60px 20px;
+    font-size: 16px;
+}
+
+/* Touch-optimering för mobil */
+@media (hover: none) {
+    button:hover {
+        background: inherit;
+    }
+}
+
+/* Responsiv design */
+@media (max-width: 480px) {
+    .container {
+        box-shadow: none;
+    }
+
+    header {
+        padding: 16px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    .view {
+        padding: 16px;
+    }
+
+    #entryText {
+        font-size: 17px;
+        min-height: 250px;
+    }
+}
