@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="En enkel dagbok för dagliga anteckningar">
+    <meta name="theme-color" content="#1a1a1a">
     <title>Min Dagbok</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Dagbok">
 </head>
 <body>
     <div class="container">
@@ -50,10 +56,27 @@
                 <button id="backToWriteBtn" class="back-btn">← Tillbaka</button>
             </div>
 
+            <div class="search-section">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Sök i dina inlägg..."
+                    aria-label="Sök"
+                />
+            </div>
+
             <div class="backup-section">
                 <button id="shareBackupBtn" class="backup-btn">
                     Säkerhetskopiera
                 </button>
+            </div>
+
+            <div id="backupReminder" class="backup-reminder" style="display: none;">
+                <div class="reminder-content">
+                    <p>🗓️ Ny månad! Glöm inte att säkerhetskopiera din dagbok</p>
+                    <button id="reminderBackupBtn" class="reminder-btn">Dela backup nu</button>
+                    <button id="dismissReminderBtn" class="dismiss-btn">×</button>
+                </div>
             </div>
 
             <div id="entriesList" class="entries-list">
@@ -108,5 +131,15 @@
     </div>
 
     <script src="app.js"></script>
+    <script>
+        // Registrera Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registrerad'))
+                    .catch(err => console.log('Service Worker misslyckades:', err));
+            });
+        }
+    </script>
 </body>
 </html>

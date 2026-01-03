@@ -250,9 +250,89 @@ button {
     font-size: 16px;
 }
 
+/* Sök-sektion */
+.search-section {
+    margin-bottom: 20px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    background: white;
+    transition: border-color 0.15s;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: #2a2a2a;
+}
+
+#searchInput::placeholder {
+    color: #999;
+}
+
 /* Backup-sektion */
 .backup-section {
     margin-bottom: 24px;
+}
+
+/* Backup-påminnelse */
+.backup-reminder {
+    background: #fffbea;
+    border: 2px solid #f5d90a;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.reminder-content {
+    position: relative;
+}
+
+.reminder-content p {
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #1a1a1a;
+}
+
+.reminder-btn {
+    width: 100%;
+    padding: 14px;
+    background: #2a2a2a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.reminder-btn:active {
+    background: #404040;
+}
+
+.dismiss-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #666;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.dismiss-btn:active {
+    background: #888;
 }
 
 .backup-btn {

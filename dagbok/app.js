@@ -1,5 +1,5 @@
-// Dagboksapp - Del 2
-// Funktionalitet: Skriva, läsa, dela backup, och kalendervy
+// Dagboksapp - Del 3
+// Funktionalitet: Skriva, läsa, dela backup, kalendervy, sökning, påminnelser & PWA
 
 class DiaryApp {
     constructor() {
@@ -42,6 +42,10 @@ class DiaryApp {
         this.prevMonthBtn = document.getElementById('prevMonth');
         this.nextMonthBtn = document.getElementById('nextMonth');
         this.calendarDays = document.getElementById('calendarDays');
+        this.searchInput = document.getElementById('searchInput');
+        this.backupReminder = document.getElementById('backupReminder');
+        this.reminderBackupBtn = document.getElementById('reminderBackupBtn');
+        this.dismissReminderBtn = document.getElementById('dismissReminderBtn');
     }
 
     // Initiera event listeners
@@ -100,6 +104,20 @@ class DiaryApp {
         // Navigera månad
         this.prevMonthBtn.addEventListener('click', () => this.changeMonth(-1));
         this.nextMonthBtn.addEventListener('click', () => this.changeMonth(1));
+
+        // Sökning
+        this.searchInput.addEventListener('input', (e) => {
+            this.filterEntries(e.target.value);
+        });
+
+        // Backup-påminnelse
+        this.reminderBackupBtn.addEventListener('click', () => {
+            this.shareBackup();
+        });
+
+        this.dismissReminderBtn.addEventListener('click', () => {
+            this.dismissBackupReminder();
+        });
     }
 
     // Hämta dagens datum som sträng (YYYY-MM-DD)
@@ -205,6 +223,7 @@ class DiaryApp {
 
     // Visa listvy med alla inlägg
     showListView() {
+        this.searchInput.value = ''; // Rensa sökning
         const entriesArray = Object.entries(this.entries)
             .sort((a, b) => b[0].localeCompare(a[0])); // Senaste först
 
@@ -215,6 +234,8 @@ class DiaryApp {
             this.noEntries.style.display = 'none';
             this.renderEntriesList(entriesArray);
         }
+
+        this.checkBackupReminder();
 
         this.writeView.classList.remove('active');
         this.listView.classList.add('active');
@@ -451,6 +472,50 @@ class DiaryApp {
                 }
             });
         });
+    }
+
+    // Filtrera inlägg baserat på sökterm
+    filterEntries(searchTerm) {
+        const term = searchTerm.toLowerCase().trim();
+
+        if (!term) {
+            // Visa alla om sökningen är tom
+            const entriesArray = Object.entries(this.entries)
+                .sort((a, b) => b[0].localeCompare(a[0]));
+            this.renderEntriesList(entriesArray);
+            return;
+        }
+
+        // Filtrera inlägg som matchar söktermen
+        const filtered = Object.entries(this.entries)
+            .filter(([date, text]) => {
+                return text.toLowerCase().includes(term) ||
+                       this.formatDisplayDate(date).toLowerCase().includes(term);
+            })
+            .sort((a, b) => b[0].localeCompare(a[0]));
+
+        if (filtered.length === 0) {
+            this.entriesList.innerHTML = '<div class="no-entries">Inga inlägg hittades</div>';
+        } else {
+            this.renderEntriesList(filtered);
+        }
+    }
+
+    // Kolla om backup-påminnelse ska visas
+    checkBackupReminder() {
+        const lastBackup = localStorage.getItem('lastBackupReminder');
+        const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+
+        if (lastBackup !== currentMonth) {
+            this.backupReminder.style.display = 'block';
+        }
+    }
+
+    // Stäng backup-påminnelse
+    dismissBackupReminder() {
+        const currentMonth = new Date().toISOString().slice(0, 7);
+        localStorage.setItem('lastBackupReminder', currentMonth);
+        this.backupReminder.style.display = 'none';
     }
 }
 
