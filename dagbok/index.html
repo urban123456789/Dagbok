@@ -35,6 +35,10 @@
                 <span class="saved-text">Sparat</span>
             </div>
 
+            <button id="viewCalendarBtn" class="secondary-btn">
+                Visa kalender
+            </button>
+
             <button id="viewListBtn" class="secondary-btn">
                 Visa alla inlägg
             </button>
@@ -73,6 +77,32 @@
 
             <div class="read-content" id="readContent">
                 <!-- Inläggstext här -->
+            </div>
+        </main>
+
+        <main id="calendarView" class="view">
+            <div class="calendar-header">
+                <button id="backToWriteFromCal" class="back-btn">← Tillbaka</button>
+                <h2 id="calendarMonthYear">Månad År</h2>
+                <div class="month-nav">
+                    <button id="prevMonth" class="month-nav-btn">←</button>
+                    <button id="nextMonth" class="month-nav-btn">→</button>
+                </div>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="calendar-weekdays">
+                    <div class="weekday">Mån</div>
+                    <div class="weekday">Tis</div>
+                    <div class="weekday">Ons</div>
+                    <div class="weekday">Tor</div>
+                    <div class="weekday">Fre</div>
+                    <div class="weekday">Lör</div>
+                    <div class="weekday">Sön</div>
+                </div>
+                <div class="calendar-days" id="calendarDays">
+                    <!-- Dagar kommer här -->
+                </div>
             </div>
         </main>
     </div>

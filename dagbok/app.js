@@ -1,11 +1,12 @@
-// Dagboksapp - MVP Del 1b
-// Funktionalitet: Skriva, läsa i läsläge, och dela backup
+// Dagboksapp - Del 2
+// Funktionalitet: Skriva, läsa, dela backup, och kalendervy
 
 class DiaryApp {
     constructor() {
         this.currentDate = this.getTodayString();
         this.entries = this.loadEntries();
         this.saveTimeout = null;
+        this.calendarDate = new Date(); // Vilken månad som visas i kalendern
 
         this.initElements();
         this.initEventListeners();
@@ -34,6 +35,13 @@ class DiaryApp {
         this.editEntryBtn = document.getElementById('editEntryBtn');
         this.readDate = document.getElementById('readDate');
         this.readContent = document.getElementById('readContent');
+        this.viewCalendarBtn = document.getElementById('viewCalendarBtn');
+        this.calendarView = document.getElementById('calendarView');
+        this.backToWriteFromCal = document.getElementById('backToWriteFromCal');
+        this.calendarMonthYear = document.getElementById('calendarMonthYear');
+        this.prevMonthBtn = document.getElementById('prevMonth');
+        this.nextMonthBtn = document.getElementById('nextMonth');
+        this.calendarDays = document.getElementById('calendarDays');
     }
 
     // Initiera event listeners
@@ -78,6 +86,20 @@ class DiaryApp {
         this.editEntryBtn.addEventListener('click', () => {
             this.showWriteView();
         });
+
+        // Visa kalendervy
+        this.viewCalendarBtn.addEventListener('click', () => {
+            this.showCalendarView();
+        });
+
+        // Tillbaka från kalender till skrivvy
+        this.backToWriteFromCal.addEventListener('click', () => {
+            this.showWriteView();
+        });
+
+        // Navigera månad
+        this.prevMonthBtn.addEventListener('click', () => this.changeMonth(-1));
+        this.nextMonthBtn.addEventListener('click', () => this.changeMonth(1));
     }
 
     // Hämta dagens datum som sträng (YYYY-MM-DD)
@@ -339,6 +361,96 @@ class DiaryApp {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    // Visa kalendervy
+    showCalendarView() {
+        this.calendarDate = new Date(); // Återställ till aktuell månad
+        this.renderCalendar();
+
+        this.writeView.classList.remove('active');
+        this.listView.classList.remove('active');
+        this.readView.classList.remove('active');
+        this.calendarView.classList.add('active');
+    }
+
+    // Ändra månad i kalendern
+    changeMonth(offset) {
+        this.calendarDate.setMonth(this.calendarDate.getMonth() + offset);
+        this.renderCalendar();
+    }
+
+    // Rendera kalendern
+    renderCalendar() {
+        const year = this.calendarDate.getFullYear();
+        const month = this.calendarDate.getMonth();
+
+        // Uppdatera månad/år-rubrik
+        const monthNames = ['januari', 'februari', 'mars', 'april', 'maj', 'juni',
+                           'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
+        this.calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+
+        // Första dagen i månaden
+        const firstDay = new Date(year, month, 1);
+        // Sista dagen i månaden
+        const lastDay = new Date(year, month + 1, 0);
+
+        // Veckodag för första dagen (0 = söndag, men vi vill ha måndag = 0)
+        let firstWeekday = firstDay.getDay() - 1;
+        if (firstWeekday === -1) firstWeekday = 6; // Söndag blir 6
+
+        // Dagar i månaden
+        const daysInMonth = lastDay.getDate();
+
+        // Dagens datum för att markera
+        const today = this.getTodayString();
+
+        // Bygg kalendern
+        let html = '';
+
+        // Tomma rutor före första dagen
+        for (let i = 0; i < firstWeekday; i++) {
+            const prevMonthDate = new Date(year, month, -(firstWeekday - i - 1));
+            const dateStr = this.formatDate(prevMonthDate);
+            html += `<div class="calendar-day other-month" data-date="${dateStr}">${prevMonthDate.getDate()}</div>`;
+        }
+
+        // Dagar i aktuell månad
+        for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const dateStr = this.formatDate(date);
+            const hasEntry = this.entries[dateStr] ? 'has-entry' : '';
+            const isToday = dateStr === today ? 'today' : '';
+
+            html += `<div class="calendar-day ${hasEntry} ${isToday}" data-date="${dateStr}">${day}</div>`;
+        }
+
+        // Fyll upp med nästa månads dagar om det behövs
+        const totalCells = firstWeekday + daysInMonth;
+        const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+
+        for (let i = 1; i <= remainingCells; i++) {
+            const nextMonthDate = new Date(year, month + 1, i);
+            const dateStr = this.formatDate(nextMonthDate);
+            html += `<div class="calendar-day other-month" data-date="${dateStr}">${i}</div>`;
+        }
+
+        this.calendarDays.innerHTML = html;
+
+        // Lägg till click-lyssnare på alla dagar
+        this.calendarDays.querySelectorAll('.calendar-day').forEach(day => {
+            day.addEventListener('click', () => {
+                const date = day.dataset.date;
+                this.currentDate = date;
+
+                // Kolla om det finns ett inlägg
+                if (this.entries[date]) {
+                    this.showReadView(date);
+                } else {
+                    this.showWriteView();
+                }
+            });
+        });
     }
 }
 
