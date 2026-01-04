@@ -1,5 +1,5 @@
 // Service Worker för offline-funktionalitet
-const CACHE_NAME = 'dagbok-v1';
+const CACHE_NAME = 'dagbok-v2';
 const urlsToCache = [
   './',
   './index.html',
