@@ -46,6 +46,8 @@ class DiaryApp {
         this.backupReminder = document.getElementById('backupReminder');
         this.reminderBackupBtn = document.getElementById('reminderBackupBtn');
         this.dismissReminderBtn = document.getElementById('dismissReminderBtn');
+        this.themeToggle = document.getElementById('themeToggle');
+        this.themeIcon = document.querySelector('.theme-icon');
     }
 
     // Initiera event listeners
@@ -118,6 +120,14 @@ class DiaryApp {
         this.dismissReminderBtn.addEventListener('click', () => {
             this.dismissBackupReminder();
         });
+
+        // Tema-växling
+        this.themeToggle.addEventListener('click', () => {
+            this.toggleTheme();
+        });
+
+        // Ladda sparat tema
+        this.loadTheme();
     }
 
     // Hämta dagens datum som sträng (YYYY-MM-DD)
@@ -516,6 +526,28 @@ class DiaryApp {
         const currentMonth = new Date().toISOString().slice(0, 7);
         localStorage.setItem('lastBackupReminder', currentMonth);
         this.backupReminder.style.display = 'none';
+    }
+
+    // Ladda sparat tema
+    loadTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        this.updateThemeIcon(savedTheme);
+    }
+
+    // Växla tema
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        this.updateThemeIcon(newTheme);
+    }
+
+    // Uppdatera tema-ikon
+    updateThemeIcon(theme) {
+        this.themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
     }
 }
 

@@ -5,10 +5,51 @@
     box-sizing: border-box;
 }
 
+/* Färgvariabler för ljust/mörkt läge */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #fafafa;
+    --bg-header: #1a1a1a;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --text-tertiary: #888;
+    --text-light: #999;
+    --border-color: #d0d0d0;
+    --border-light: #e0e0e0;
+    --btn-dark-bg: #2a2a2a;
+    --btn-dark-hover: #404040;
+    --btn-light-bg: white;
+    --btn-text-light: white;
+    --entry-bg: white;
+    --shadow: rgba(0,0,0,0.1);
+    --calendar-other: #fafafa;
+    --calendar-other-text: #ccc;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-header: #000000;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-tertiary: #888;
+    --text-light: #666;
+    --border-color: #404040;
+    --border-light: #2a2a2a;
+    --btn-dark-bg: #e0e0e0;
+    --btn-dark-hover: #f0f0f0;
+    --btn-light-bg: #2a2a2a;
+    --btn-text-light: #1a1a1a;
+    --entry-bg: #1a1a1a;
+    --shadow: rgba(0,0,0,0.3);
+    --calendar-other: #0a0a0a;
+    --calendar-other-text: #404040;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: #fafafa;
-    color: #1a1a1a;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -17,23 +58,42 @@ body {
 .container {
     max-width: 680px;
     margin: 0 auto;
-    background: white;
+    background: var(--bg-primary);
     min-height: 100vh;
-    box-shadow: 0 0 1px rgba(0,0,0,0.1);
+    box-shadow: 0 0 1px var(--shadow);
 }
 
 /* Header */
 header {
-    background: #1a1a1a;
-    color: white;
+    background: var(--bg-header);
+    color: var(--btn-text-light);
     padding: 24px 20px;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header h1 {
     font-size: 20px;
     font-weight: 500;
     letter-spacing: 0.5px;
+}
+
+.theme-toggle {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.theme-icon {
+    display: block;
+    line-height: 1;
 }
 
 /* Views */
@@ -80,23 +140,24 @@ header h1 {
     flex: 1;
     padding: 16px;
     font-size: 17px;
-    border: 1px solid #d0d0d0;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     text-align: center;
     font-weight: 400;
-    background: white;
+    background: var(--entry-bg);
+    color: var(--text-primary);
 }
 
 #dateInput:focus {
     outline: none;
-    border-color: #2a2a2a;
+    border-color: var(--btn-dark-bg);
 }
 
 /* Datumvisning */
 .date-display {
     font-size: 15px;
     font-weight: 500;
-    color: #4a4a4a;
+    color: var(--text-secondary);
     text-align: center;
     margin-bottom: 8px;
     text-transform: uppercase;
@@ -107,7 +168,7 @@ header h1 {
 .entry-status {
     text-align: center;
     font-size: 13px;
-    color: #888;
+    color: var(--text-tertiary);
     margin-bottom: 20px;
     min-height: 18px;
 }
@@ -119,21 +180,22 @@ header h1 {
     padding: 24px;
     font-size: 19px;
     line-height: 1.75;
-    border: 1px solid #d0d0d0;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     resize: vertical;
     font-family: inherit;
     transition: border-color 0.15s;
-    background: white;
+    background: var(--entry-bg);
+    color: var(--text-primary);
 }
 
 #entryText:focus {
     outline: none;
-    border-color: #2a2a2a;
+    border-color: var(--btn-dark-bg);
 }
 
 #entryText::placeholder {
-    color: #999;
+    color: var(--text-light);
 }
 
 /* Sparindikator */
@@ -145,7 +207,7 @@ header h1 {
 
 .saved-text {
     display: inline-block;
-    color: #2a2a2a;
+    color: var(--text-secondary);
     font-size: 13px;
     opacity: 0;
     transition: opacity 0.3s;
@@ -164,9 +226,9 @@ button {
     width: 100%;
     padding: 18px;
     margin-top: 24px;
-    background: white;
-    color: #2a2a2a;
-    border: 1px solid #d0d0d0;
+    background: var(--btn-light-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 16px;
     font-weight: 500;
@@ -175,8 +237,8 @@ button {
 }
 
 .secondary-btn:active {
-    background: #f5f5f5;
-    border-color: #2a2a2a;
+    background: var(--bg-secondary);
+    border-color: var(--btn-dark-bg);
 }
 
 /* Listvy */
@@ -186,13 +248,13 @@ button {
     align-items: center;
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .list-header h2 {
     font-size: 20px;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--text-primary);
 }
 
 .back-btn {
@@ -218,8 +280,8 @@ button {
 }
 
 .entry-item {
-    background: white;
-    border: 1px solid #d0d0d0;
+    background: var(--entry-bg);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     padding: 20px;
     cursor: pointer;
@@ -227,13 +289,13 @@ button {
 }
 
 .entry-item:active {
-    background: #fafafa;
-    border-color: #2a2a2a;
+    background: var(--bg-secondary);
+    border-color: var(--btn-dark-bg);
 }
 
 .entry-date {
     font-weight: 500;
-    color: #2a2a2a;
+    color: var(--text-primary);
     margin-bottom: 10px;
     font-size: 15px;
     text-transform: uppercase;
@@ -241,7 +303,7 @@ button {
 }
 
 .entry-preview {
-    color: #4a4a4a;
+    color: var(--text-secondary);
     font-size: 17px;
     line-height: 1.65;
     white-space: pre-wrap;
@@ -250,7 +312,7 @@ button {
 
 .no-entries {
     text-align: center;
-    color: #999;
+    color: var(--text-light);
     padding: 80px 20px;
     font-size: 16px;
 }
@@ -264,19 +326,20 @@ button {
     width: 100%;
     padding: 16px;
     font-size: 16px;
-    border: 1px solid #d0d0d0;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    background: white;
+    background: var(--entry-bg);
+    color: var(--text-primary);
     transition: border-color 0.15s;
 }
 
 #searchInput:focus {
     outline: none;
-    border-color: #2a2a2a;
+    border-color: var(--btn-dark-bg);
 }
 
 #searchInput::placeholder {
-    color: #999;
+    color: var(--text-light);
 }
 
 /* Backup-sektion */
@@ -364,7 +427,7 @@ button {
     align-items: center;
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .edit-btn {
@@ -386,10 +449,10 @@ button {
 .read-date {
     font-size: 16px;
     font-weight: 500;
-    color: #2a2a2a;
+    color: var(--text-primary);
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-light);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -397,7 +460,7 @@ button {
 .read-content {
     font-size: 19px;
     line-height: 1.75;
-    color: #1a1a1a;
+    color: var(--text-primary);
     white-space: pre-wrap;
     word-wrap: break-word;
     padding: 0;
@@ -412,13 +475,13 @@ button {
     align-items: center;
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .calendar-header h2 {
     font-size: 18px;
     font-weight: 500;
-    color: #1a1a1a;
+    color: var(--text-primary);
     text-transform: capitalize;
 }
 
@@ -463,7 +526,7 @@ button {
     text-align: center;
     font-size: 13px;
     font-weight: 500;
-    color: #666;
+    color: var(--text-tertiary);
     padding: 8px 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -480,45 +543,46 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-light);
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
     transition: all 0.15s;
-    background: white;
+    background: var(--entry-bg);
+    color: var(--text-primary);
     position: relative;
 }
 
 .calendar-day:active {
-    background: #f5f5f5;
-    border-color: #2a2a2a;
+    background: var(--bg-secondary);
+    border-color: var(--btn-dark-bg);
 }
 
 .calendar-day.other-month {
-    color: #ccc;
-    background: #fafafa;
+    color: var(--calendar-other-text);
+    background: var(--calendar-other);
 }
 
 .calendar-day.today {
-    border-color: #2a2a2a;
+    border-color: var(--btn-dark-bg);
     border-width: 2px;
     font-weight: 600;
 }
 
 .calendar-day.has-entry {
-    background: #2a2a2a;
-    color: white;
+    background: var(--btn-dark-bg);
+    color: var(--btn-text-light);
     font-weight: 500;
 }
 
 .calendar-day.has-entry:active {
-    background: #404040;
+    background: var(--btn-dark-hover);
 }
 
 /* Touch-optimering för mobil */
 @media (hover: none) {
     .secondary-btn:hover {
-        background: white;
+        background: var(--btn-light-bg);
     }
 
     .nav-btn:hover,
@@ -527,7 +591,7 @@ button {
     .edit-btn:hover,
     .backup-btn:hover,
     .reminder-btn:hover {
-        background: #2a2a2a;
+        background: var(--btn-dark-bg);
     }
 }
 
