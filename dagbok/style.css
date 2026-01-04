@@ -507,8 +507,17 @@ button {
 
 /* Touch-optimering för mobil */
 @media (hover: none) {
-    button:hover {
-        background: inherit;
+    .secondary-btn:hover {
+        background: white;
+    }
+
+    .nav-btn:hover,
+    .month-nav-btn:hover,
+    .back-btn:hover,
+    .edit-btn:hover,
+    .backup-btn:hover,
+    .reminder-btn:hover {
+        background: #2a2a2a;
     }
 }
 
